@@ -5,7 +5,14 @@ const mockDatabase = [
   {
     id: 1,
     email: "om@gmail.com",
-    password: "123", // In a real application, passwords should be hashed
+    password: "123",
+    role: "user",
+  },
+  {
+    id: 2,
+    email: "vaibhav@gmail.com",
+    password: "123",
+    role: "admin",
   },
 ];
 
@@ -23,7 +30,8 @@ export const authOptions = {
         // Match user from the mock database
         const user = mockDatabase.find(
           (user) =>
-            user.email === credentials?.email && user.password === credentials?.password
+            user.email === credentials?.email &&
+            user.password === credentials?.password
         );
         console.log("Authorized user:", user);
 
@@ -32,7 +40,7 @@ export const authOptions = {
         }
 
         // Return user object, which will be passed to the JWT callback
-        return { id: user.id, email: user.email };
+        return { id: user.id, email: user.email, role: user.role };
       },
     }),
   ],
@@ -46,6 +54,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.role = user.role;
       }
       return token;
     },
@@ -56,6 +65,7 @@ export const authOptions = {
         session.user = {
           id: token.id,
           email: token.email,
+          role: token.role,
         };
       }
       return session;
